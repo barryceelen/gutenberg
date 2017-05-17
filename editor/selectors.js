@@ -16,6 +16,10 @@ export function isEditorSidebarOpened( state ) {
 	return state.isSidebarOpened;
 }
 
+export function getEditorWidth( state ) {
+	return state.editorWidth;
+}
+
 export function hasEditorUndo( state ) {
 	return state.editor.history.past.length > 0;
 }
