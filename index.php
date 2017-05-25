@@ -584,7 +584,7 @@ function the_gutenberg_project() {
 	<?php
 }
 
-function gutenberg_load_blocks_server_side_redering() {
+function gutenberg_load_blocks_server_side_rendering() {
 	require_once GUTENBERG__BLOCKS_LIBRARY_DIR . '/latest-posts/index.php';
 }
-add_action( 'init', 'gutenberg_load_blocks_server_side_redering' );
+add_action( 'init', 'gutenberg_load_blocks_server_side_rendering' );
