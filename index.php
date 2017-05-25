@@ -584,6 +584,13 @@ function the_gutenberg_project() {
 	<?php
 }
 
+/**
+ * Loads server-side rendering of blocks.
+ *
+ * If your block supports SSR, import it here.
+ *
+ * @since 0.1.0
+ */
 function gutenberg_load_blocks_server_side_rendering() {
 	require_once GUTENBERG__BLOCKS_LIBRARY_DIR . '/latest-posts/index.php';
 }
