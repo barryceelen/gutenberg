@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import moment from 'moment';
 import { first, last, get } from 'lodash';
 
 /**
@@ -60,6 +61,18 @@ export function getEditedPostVisibility( state ) {
 		return 'password';
 	}
 	return 'public';
+}
+
+export function isEditedPostAlreadyPublished( state ) {
+	const post = getCurrentPost( state );
+
+	return [ 'publish', 'private' ].indexOf( post.status ) !== -1 ||
+		( post.status === 'future' && moment( post.date ).isBefore( moment() ) );
+}
+
+export function isEditedPostBeingScheduled( state ) {
+	const date = getEditedPostAttribute( state, 'date' );
+	return moment( date ).isAfter( moment() );
 }
 
 export function getEditedPostTitle( state ) {
