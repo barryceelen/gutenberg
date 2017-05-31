@@ -43,7 +43,6 @@ import {
 	isSavingPost,
 	didPostSaveRequestSucceed,
 	didPostSaveRequestFail,
-	isSavingNewPost,
 } from '../selectors';
 
 describe( 'selectors', () => {
@@ -883,28 +882,6 @@ describe( 'selectors', () => {
 			};
 
 			expect( didPostSaveRequestFail( state ) ).to.be.false();
-		} );
-	} );
-
-	describe( 'isSavingNewPost', () => {
-		it( 'should return true if the post being saved is new', () => {
-			const state = {
-				saving: {
-					isNew: true,
-				},
-			};
-
-			expect( isSavingNewPost( state ) ).to.be.true();
-		} );
-
-		it( 'should return false if the post being saved is not new', () => {
-			const state = {
-				saving: {
-					isNew: false,
-				},
-			};
-
-			expect( isSavingNewPost( state ) ).to.be.false();
 		} );
 	} );
 } );

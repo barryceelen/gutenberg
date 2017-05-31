@@ -228,10 +228,6 @@ export function didPostSaveRequestFail( state ) {
 	return !! state.saving.error;
 }
 
-export function isSavingNewPost( state ) {
-	return state.saving.isNew;
-}
-
 export function getSuggestedPostFormat( state ) {
 	const blocks = state.editor.blockOrder;
 
