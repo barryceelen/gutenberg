@@ -166,8 +166,8 @@ class VisualEditorBlock extends wp.element.Component {
 		}
 	}
 
-	isWide() {
-		return this.props.block.attributes.align === 'wide';
+	isFullWidth() {
+		return this.props.block.attributes.align === 'full';
 	}
 
 	componentDidMount() {
@@ -214,7 +214,7 @@ class VisualEditorBlock extends wp.element.Component {
 
 		let style;
 
-		if ( this.isWide() && editorWidth ) {
+		if ( this.isFullWidth() && editorWidth ) {
 			style = {
 				width: editorWidth[ 0 ],
 				marginLeft: -( editorWidth[ 0 ] / 2 ) + ( editorWidth[ 1 ] / 2 ),
