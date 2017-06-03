@@ -22,9 +22,9 @@ import {
 	getBlock,
 	getBlocks,
 	getSelectedBlock,
-	getSelectedBlocks,
-	getBlockSelectionStart,
-	getBlockSelectionEnd,
+	getMultiSelectedBlockUids,
+	getMultiSelectedBlocksStartUid,
+	getMultiSelectedBlocksEndUid,
 	getBlockUids,
 	getBlockIndex,
 	isFirstBlock,
@@ -33,7 +33,7 @@ import {
 	getNextBlock,
 	isBlockSelected,
 	isBlockMultiSelected,
-	isFirstSelectedBlock,
+	isFirstMultiSelectedBlock,
 	isBlockHovered,
 	getBlockFocus,
 	isTypingInBlock,
@@ -409,7 +409,7 @@ describe( 'selectors', () => {
 		} );
 	} );
 
-	describe( 'getSelectedBlocks', () => {
+	describe( 'getMultiSelectedBlockUids', () => {
 		it( 'should return empty if there is no multi selection', () => {
 			const state = {
 				editor: {
@@ -418,7 +418,7 @@ describe( 'selectors', () => {
 				multiSelectedBlocks: { start: null, end: null },
 			};
 
-			expect( getSelectedBlocks( state ) ).to.eql( [] );
+			expect( getMultiSelectedBlockUids( state ) ).to.eql( [] );
 		} );
 
 		it( 'should return empty if there is no multi selection', () => {
@@ -429,11 +429,11 @@ describe( 'selectors', () => {
 				multiSelectedBlocks: { start: 2, end: 4 },
 			};
 
-			expect( getSelectedBlocks( state ) ).to.eql( [ 4, 3, 2 ] );
+			expect( getMultiSelectedBlockUids( state ) ).to.eql( [ 4, 3, 2 ] );
 		} );
 	} );
 
-	describe( 'getBlockSelectionStart', () => {
+	describe( 'getMultiSelectedBlocksStartUid', () => {
 		it( 'returns null if there is no multi selection', () => {
 			const state = {
 				editor: {
@@ -442,7 +442,7 @@ describe( 'selectors', () => {
 				multiSelectedBlocks: { start: null, end: null },
 			};
 
-			expect( getBlockSelectionStart( state ) ).to.be.null();
+			expect( getMultiSelectedBlocksStartUid( state ) ).to.be.null();
 		} );
 
 		it( 'returns multi selection start', () => {
@@ -453,11 +453,11 @@ describe( 'selectors', () => {
 				multiSelectedBlocks: { start: 2, end: 4 },
 			};
 
-			expect( getBlockSelectionStart( state ) ).to.equal( 2 );
+			expect( getMultiSelectedBlocksStartUid( state ) ).to.equal( 2 );
 		} );
 	} );
 
-	describe( 'getBlockSelectionEnd', () => {
+	describe( 'getMultiSelectedBlocksEndUid', () => {
 		it( 'returns null if there is no multi selection', () => {
 			const state = {
 				editor: {
@@ -466,7 +466,7 @@ describe( 'selectors', () => {
 				multiSelectedBlocks: { start: null, end: null },
 			};
 
-			expect( getBlockSelectionEnd( state ) ).to.be.null();
+			expect( getMultiSelectedBlocksEndUid( state ) ).to.be.null();
 		} );
 
 		it( 'returns multi selection end', () => {
@@ -477,7 +477,7 @@ describe( 'selectors', () => {
 				multiSelectedBlocks: { start: 2, end: 4 },
 			};
 
-			expect( getBlockSelectionEnd( state ) ).to.equal( 4 );
+			expect( getMultiSelectedBlocksEndUid( state ) ).to.equal( 4 );
 		} );
 	} );
 
@@ -650,7 +650,7 @@ describe( 'selectors', () => {
 		} );
 	} );
 
-	describe( 'isFirstSelectedBlock', () => {
+	describe( 'isFirstMultiSelectedBlock', () => {
 		const state = {
 			editor: {
 				blockOrder: [ 5, 4, 3, 2, 1 ],
@@ -659,11 +659,11 @@ describe( 'selectors', () => {
 		};
 
 		it( 'should return true if the block is first in multi selection', () => {
-			expect( isFirstSelectedBlock( state, 4 ) ).to.be.true();
+			expect( isFirstMultiSelectedBlock( state, 4 ) ).to.be.true();
 		} );
 
 		it( 'should return false if the block is not first in multi selection', () => {
-			expect( isFirstSelectedBlock( state, 3 ) ).to.be.false();
+			expect( isFirstMultiSelectedBlock( state, 3 ) ).to.be.false();
 		} );
 	} );
 

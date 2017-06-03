@@ -33,8 +33,8 @@ import {
 	isBlockHovered,
 	isBlockSelected,
 	isBlockMultiSelected,
-	isFirstSelectedBlock,
-	getSelectedBlocks,
+	isFirstMultiSelectedBlock,
+	getMultiSelectedBlockUids,
 	isTypingInBlock,
 } from '../../selectors';
 
@@ -63,7 +63,7 @@ class VisualEditorBlock extends wp.element.Component {
 		if (
 			this.props.order !== newProps.order &&
 			( ( this.props.isSelected && newProps.isSelected ) ||
-			( this.props.isFirstSelected && newProps.isFirstSelected ) )
+			( this.props.isFirstMultiSelected && newProps.isFirstMultiSelected ) )
 		) {
 			this.previousOffset = this.node.getBoundingClientRect().top;
 		}
@@ -104,7 +104,7 @@ class VisualEditorBlock extends wp.element.Component {
 	removeOrDeselect( { keyCode, target } ) {
 		const {
 			uid,
-			selectedBlocks,
+			multiSelectedBlockUids,
 			previousBlock,
 			onRemove,
 			onFocus,
@@ -121,8 +121,8 @@ class VisualEditorBlock extends wp.element.Component {
 				}
 			}
 
-			if ( selectedBlocks.length ) {
-				onRemove( selectedBlocks );
+			if ( multiSelectedBlockUids.length ) {
+				onRemove( multiSelectedBlockUids );
 			}
 		}
 
@@ -172,7 +172,7 @@ class VisualEditorBlock extends wp.element.Component {
 	}
 
 	render() {
-		const { block, selectedBlocks } = this.props;
+		const { block, multiSelectedBlockUids } = this.props;
 		const blockType = wp.blocks.getBlockType( block.name );
 		// The block as rendered in the editor is composed of general block UI
 		// (mover, toolbar, wrapper) and the display of the block content, which
@@ -191,7 +191,7 @@ class VisualEditorBlock extends wp.element.Component {
 		}
 
 		// Generate the wrapper class names handling the different states of the block.
-		const { isHovered, isSelected, isMultiSelected, isFirstSelected, isTyping, focus } = this.props;
+		const { isHovered, isSelected, isMultiSelected, isFirstMultiSelected, isTyping, focus } = this.props;
 		const showUI = isSelected && ( ! isTyping || ! focus.collapsed );
 		const className = classnames( 'editor-visual-editor__block', {
 			'is-selected': showUI,
@@ -253,8 +253,8 @@ class VisualEditorBlock extends wp.element.Component {
 						</div>
 					</CSSTransitionGroup>
 				}
-				{ isFirstSelected && (
-					<BlockMover uids={ selectedBlocks } />
+				{ isFirstMultiSelected && (
+					<BlockMover uids={ multiSelectedBlockUids } />
 				) }
 				<div
 					onKeyPress={ this.maybeStartTyping }
@@ -284,8 +284,8 @@ export default connect(
 			block: getBlock( state, ownProps.uid ),
 			isSelected: isBlockSelected( state, ownProps.uid ),
 			isMultiSelected: isBlockMultiSelected( state, ownProps.uid ),
-			isFirstSelected: isFirstSelectedBlock( state, ownProps.uid ),
-			selectedBlocks: getSelectedBlocks( state ),
+			isFirstMultiSelected: isFirstMultiSelectedBlock( state, ownProps.uid ),
+			multiSelectedBlockUids: getMultiSelectedBlockUids( state ),
 			isHovered: isBlockHovered( state, ownProps.uid ),
 			focus: getBlockFocus( state, ownProps.uid ),
 			isTyping: isTypingInBlock( state, ownProps.uid ),
