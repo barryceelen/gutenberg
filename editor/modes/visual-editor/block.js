@@ -34,7 +34,6 @@ import {
 	isBlockSelected,
 	isBlockMultiSelected,
 	isFirstMultiSelectedBlock,
-	getMultiSelectedBlockUids,
 	isTypingInBlock,
 } from '../../selectors';
 
@@ -285,7 +284,6 @@ export default connect(
 			isSelected: isBlockSelected( state, ownProps.uid ),
 			isMultiSelected: isBlockMultiSelected( state, ownProps.uid ),
 			isFirstMultiSelected: isFirstMultiSelectedBlock( state, ownProps.uid ),
-			multiSelectedBlockUids: getMultiSelectedBlockUids( state ),
 			isHovered: isBlockHovered( state, ownProps.uid ),
 			focus: getBlockFocus( state, ownProps.uid ),
 			isTyping: isTypingInBlock( state, ownProps.uid ),
