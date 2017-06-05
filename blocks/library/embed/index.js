@@ -9,22 +9,10 @@ import { Button, Placeholder, HtmlEmbed, Spinner } from 'components';
 import './style.scss';
 import { registerBlockType, query } from '../../api';
 import Editable from '../../editable';
+import BlockControls from '../../block-controls';
+import BlockAlignmentToolbar from '../../block-alignment-toolbar';
 
 const { attr, children } = query;
-
-/**
- * Returns an attribute setter with behavior that if the target value is
- * already the assigned attribute value, it will be set to undefined.
- *
- * @param  {string}   align Alignment value
- * @return {Function}       Attribute setter
- */
-function toggleAlignment( align ) {
-	return ( attributes, setAttributes ) => {
-		const nextAlign = attributes.align === align ? undefined : align;
-		setAttributes( { align: nextAlign } );
-	};
-}
 
 registerBlockType( 'core/embed', {
 	title: wp.i18n.__( 'Embed' ),
@@ -37,33 +25,6 @@ registerBlockType( 'core/embed', {
 		title: attr( 'iframe', 'title' ),
 		caption: children( 'figcaption' ),
 	},
-
-	controls: [
-		{
-			icon: 'align-left',
-			title: wp.i18n.__( 'Align left' ),
-			isActive: ( { align } ) => 'left' === align,
-			onClick: toggleAlignment( 'left' ),
-		},
-		{
-			icon: 'align-center',
-			title: wp.i18n.__( 'Align center' ),
-			isActive: ( { align } ) => ! align || 'center' === align,
-			onClick: toggleAlignment( 'center' ),
-		},
-		{
-			icon: 'align-right',
-			title: wp.i18n.__( 'Align right' ),
-			isActive: ( { align } ) => 'right' === align,
-			onClick: toggleAlignment( 'right' ),
-		},
-		{
-			icon: 'align-full-width',
-			title: wp.i18n.__( 'Wide width' ),
-			isActive: ( { align } ) => 'wide' === align,
-			onClick: toggleAlignment( 'wide' ),
-		},
-	],
 
 	getEditWrapperProps( attributes ) {
 		const { align } = attributes;
@@ -126,12 +87,26 @@ registerBlockType( 'core/embed', {
 
 		render() {
 			const { html, type, error, fetching } = this.state;
-			const { url, caption } = this.props.attributes;
+			const { url, caption, align } = this.props.attributes;
 			const { setAttributes, focus, setFocus } = this.props;
+			const updateAlignment = ( nextAlign ) => setAttributes( { align: nextAlign } );
+
+			const controls = (
+				focus && (
+					<BlockControls key="controls">
+						<BlockAlignmentToolbar
+							value={ align }
+							onChange={ updateAlignment }
+							controls={ [ 'left', 'center', 'right', 'wide' ] }
+						/>
+					</BlockControls>
+				)
+			);
 
 			if ( ! html ) {
-				return (
-					<Placeholder icon="cloud" label={ wp.i18n.__( 'Embed URL' ) } className="blocks-embed">
+				return [
+					controls,
+					<Placeholder key="placeholder" icon="cloud" label={ wp.i18n.__( 'Embed URL' ) } className="blocks-embed">
 						<form onSubmit={ this.doServerSideRender }>
 							<input
 								type="url"
@@ -148,8 +123,8 @@ registerBlockType( 'core/embed', {
 							}
 							{ error && <p className="components-placeholder__error">{ wp.i18n.__( 'Sorry, we could not embed that content.' ) }</p> }
 						</form>
-					</Placeholder>
-				);
+					</Placeholder>,
+				];
 			}
 
 			const domain = url.split( '/' )[ 2 ].replace( /^www\./, '' );
@@ -160,8 +135,9 @@ registerBlockType( 'core/embed', {
 				typeClassName = 'blocks-embed-video';
 			}
 
-			return (
-				<figure className={ typeClassName }>
+			return [
+				controls,
+				<figure key="embed" className={ typeClassName }>
 					{ ( cannotPreview ) ? (
 						<Placeholder icon="cloud" label={ wp.i18n.__( 'Embed URL' ) }>
 							<p className="components-placeholder__error"><a href={ url }>{ url }</a></p>
@@ -182,8 +158,8 @@ registerBlockType( 'core/embed', {
 							inlineToolbar
 						/>
 					) : null }
-				</figure>
-			);
+				</figure>,
+			];
 		}
 	},
 
